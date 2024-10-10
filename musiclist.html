@@ -14,7 +14,11 @@
     flex-direction: column;
     align-items: center;
   }
+  .music_item {
+    font-size: 24px;
+  }
   .delete_btn {
+    margin-left: 20px;
     border: 0;
   }
   .delete_btn:hover {
@@ -39,27 +43,26 @@
     let inputMusicName = document.querySelector('#music_name');
     document.querySelector('#add_btn').addEventListener('click', () => {
       let musicName = inputMusicName.value;
+      
       if(musicName === '') return;
+
       let newLi = document.createElement('li');
+      let newStrong = document.createElement('strong');
       let deleteBtn = document.createElement('button');
-      deleteBtn.setAttribute('type', 'button')
-      deleteBtn.setAttribute('class', 'delete_btn')
+      deleteBtn.setAttribute('type', 'button');
+      deleteBtn.setAttribute('class', 'delete_btn');
       deleteBtn.setAttribute('onclick', 'return this.parentNode.remove()');
       deleteBtn.innerHTML = 'X';
       
-      newLi.setAttribute('value', musicName)
-      newLi.innerHTML = musicName
+      newStrong.innerHTML = musicName;
+      
+      newLi.setAttribute('class', 'music_item');
 
+      newLi.appendChild(newStrong);
       newLi.appendChild(deleteBtn);
       musicList.appendChild(newLi);
       inputMusicName.value = '';
     })
-    // let deleteBtns = document.querySelectorAll('.delete_btn')
-    // for(let i = 0; i < deleteBtns.length; i++) {
-    //   deleteBtns[i].addEventListener('click', (e) => {
-    //     e.target.parentElement.remove();
-    //   })
-    // }
   </script>
 </body>
 </html>
