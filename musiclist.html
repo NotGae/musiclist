@@ -44,21 +44,22 @@
       let deleteBtn = document.createElement('button');
       deleteBtn.setAttribute('type', 'button')
       deleteBtn.setAttribute('class', 'delete_btn')
-      deleteBtn.setAttribute('onclick', 'deleteList()')
+      deleteBtn.setAttribute('onclick', 'return this.parentNode.remove()');
       deleteBtn.innerHTML = 'X';
       
       newLi.setAttribute('value', musicName)
-      newLi.setAttribute('width', '100%')
       newLi.innerHTML = musicName
 
       newLi.appendChild(deleteBtn);
       musicList.appendChild(newLi);
-      listLength += 1;
       inputMusicName.value = '';
     })
-    function deleteList() {
-      document.querySelector()
-    }
+    // let deleteBtns = document.querySelectorAll('.delete_btn')
+    // for(let i = 0; i < deleteBtns.length; i++) {
+    //   deleteBtns[i].addEventListener('click', (e) => {
+    //     e.target.parentElement.remove();
+    //   })
+    // }
   </script>
 </body>
 </html>
