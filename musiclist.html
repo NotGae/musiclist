@@ -1,68 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>음악즐겨찾기</title>
-</head>
-<style>
-  #title {
-    text-align: center;
-  }
-  #music_table {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .music_item {
-    font-size: 24px;
-  }
-  .delete_btn {
-    margin-left: 20px;
-    border: 0;
-  }
-  .delete_btn:hover {
-    cursor: pointer;
-  }
-  .nameLabel, #music_name, #add_btn {
-    width: 20vw;
-    text-align: center;
-  }
-</style>
-<body>
-  <h1 id="title">음악 추가하기</h1>
-  <hr>
-  <main id="music_table">
-    <label class="nameLabel" for="musicName">좋아하는 노래이름</label>
-    <input type="text" name="musicName" id="music_name">
-    <button type="button" id="add_btn">추가</button>
-    <ol id="music_list"></ol>
-  </main>
-  <script>
-    let musicList = document.querySelector('#music_list');
-    let inputMusicName = document.querySelector('#music_name');
-    document.querySelector('#add_btn').addEventListener('click', () => {
-      let musicName = inputMusicName.value;
-      
-      if(musicName === '') return;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>음악즐겨찾기</title>
+  </head>
+  <style>
+    #title {
+      text-align: center;
+    }
+    #music_table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .music_item {
+      font-size: 24px;
+    }
+    .delete_btn {
+      margin-left: 20px;
+      border: 0;
+    }
+    .delete_btn:hover {
+      cursor: pointer;
+    }
+    .nameLabel,
+    #music_name,
+    #add_btn {
+      width: 20vw;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <h1 id="title">음악 추가하기</h1>
+    <hr />
+    <main id="music_table">
+      <label class="nameLabel" for="musicName">좋아하는 노래이름</label>
+      <input type="text" name="musicName" id="music_name" />
+      <button type="button" id="add_btn">추가</button>
+      <ol id="music_list"></ol>
+    </main>
+    <script>
+      let musicId = 1;
+      window.onload = init;
+      let musicItems = [];
+      let musicList = document.querySelector('#music_list');
+      let inputMusicName = document.querySelector('#music_name');
+      document.querySelector('#add_btn').addEventListener('click', () => {
+        let musicName = inputMusicName.value;
 
-      let newLi = document.createElement('li');
-      let newStrong = document.createElement('strong');
-      let deleteBtn = document.createElement('button');
-      deleteBtn.setAttribute('type', 'button');
-      deleteBtn.setAttribute('class', 'delete_btn');
-      deleteBtn.setAttribute('onclick', 'return this.parentNode.remove()');
-      deleteBtn.innerHTML = 'X';
-      
-      newStrong.innerHTML = musicName;
-      
-      newLi.setAttribute('class', 'music_item');
+        if (musicName === '') return;
 
-      newLi.appendChild(newStrong);
-      newLi.appendChild(deleteBtn);
-      musicList.appendChild(newLi);
-      inputMusicName.value = '';
-    })
-  </script>
-</body>
+        addList(musicName);
+        inputMusicName.value = '';
+
+        musicItems = JSON.parse(localStorage.getItem('musicItems')) || [];
+        musicItems.push({ id: musicId, title: musicName });
+        // id auto increatment
+        musicId = musicId + 1;
+        localStorage.setItem('musicItems', JSON.stringify(musicItems));
+        localStorage.setItem('id', musicId);
+        console.log(musicId, musicItems);
+      });
+      function deleteMusic(e) {
+        musicItems = JSON.parse(localStorage.getItem('musicItems')) || [];
+        musicItems = musicItems.filter(
+          (title) => title.id !== parseInt(e.target.parentNode.id)
+        );
+        localStorage.setItem('musicItems', JSON.stringify(musicItems));
+        e.target.parentNode.remove();
+      }
+      function addList(musicId, musicName) {
+        let newLi = document.createElement('li');
+        let newStrong = document.createElement('strong');
+        let deleteBtn = document.createElement('button');
+        deleteBtn.setAttribute('type', 'button');
+        deleteBtn.setAttribute('class', 'delete_btn');
+        deleteBtn.setAttribute('onclick', 'deleteMusic(event)');
+        deleteBtn.innerHTML = 'X';
+
+        newStrong.innerHTML = musicName;
+
+        newLi.setAttribute('id', musicId);
+        newLi.setAttribute('class', 'music_item');
+
+        newLi.appendChild(newStrong);
+        newLi.appendChild(deleteBtn);
+        musicList.appendChild(newLi);
+      }
+      function init() {
+        musicId = parseInt(localStorage.getItem('id')) || 1;
+        musicItems = JSON.parse(localStorage.getItem('musicItems')) || [];
+        musicItems.forEach((item) => {
+          addList(item.id, item.title);
+        });
+      }
+    </script>
+  </body>
 </html>
